@@ -7,6 +7,7 @@ import edu.bu.chess.game.piece.PieceType;
 import edu.bu.chess.game.player.Player;
 import edu.bu.chess.game.player.PlayerType;
 import edu.bu.chess.game.move.Move;
+import edu.bu.chess.game.move.MoveType;
 import edu.bu.chess.game.Game;
 import edu.bu.chess.game.Board;
 import edu.bu.chess.utils.Coordinate;
@@ -14,7 +15,6 @@ import edu.cwru.sepia.util.Direction;
 import edu.bu.chess.game.move.PromotePawnMove;
 
 // JAVA PROJECT IMPORTS
-import src.pas.chess.heuristics.DefaultHeuristics;
 import java.util.List;
 import java.util.Map;
 import java.util.Arrays;
@@ -78,6 +78,7 @@ public class CustomHeuristics
 		double maxPlayerCenterPieces = 0;
 		double minPlayerCenterPieces = 0;
 
+		// max
 		for (Piece piece : node.getGame().getBoard().getPieces(getMaxPlayer(node))) {
 			Coordinate position = node.getGame().getCurrentPosition(piece);
 			if (isCenterSquare(position, "max")) {
@@ -91,6 +92,7 @@ public class CustomHeuristics
 			}
 		}
 
+		// min
 		for (Piece piece : node.getGame().getBoard().getPieces(getMinPlayer(node))) {
 			Coordinate position = node.getGame().getCurrentPosition(piece);
 			if (isCenterSquare(position, "min")) {
@@ -168,6 +170,39 @@ public class CustomHeuristics
 		initialPositions.put(PieceType.QUEEN, queenPositions);
 
 		return initialPositions;
+	}
+
+	// calculate the difference in promotion between the two players
+	public static double getPromotionAdvantage(DFSTreeNode node) {
+		double maxPlayerPromotion = 0;
+		double minPlayerPromotion = 0;
+		Game game = node.getGame();
+
+		// max
+		for (Piece piece : node.getGame().getBoard().getPieces(getMaxPlayer(node))) {
+			if (piece.getType() == PieceType.PAWN) {
+				List<Move> moves = piece.getAllMoves(game);
+				for (Move move : moves) {
+					if (move.getType() == MoveType.PROMOTEPAWNMOVE) {
+						maxPlayerPromotion += 1;
+					}
+				}
+			}
+		}
+
+		// min
+		for (Piece piece : node.getGame().getBoard().getPieces(getMinPlayer(node))) {
+			if (piece.getType() == PieceType.PAWN) {
+				List<Move> moves = piece.getAllMoves(game);
+				for (Move move : moves) {
+					if (move.getType() == MoveType.PROMOTEPAWNMOVE) {
+						minPlayerPromotion += 1;
+					}
+				}
+			}
+		}
+
+		return maxPlayerPromotion - minPlayerPromotion;
 	}
 
 	public static double getMaxPlayerHeuristicValue(DFSTreeNode node)
