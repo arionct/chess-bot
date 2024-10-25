@@ -8,6 +8,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import edu.bu.chess.utils.Coordinate;
+import edu.bu.chess.game.move.Move;
+import edu.bu.chess.game.move.MoveType;
+import edu.bu.chess.game.move.CaptureMove;
+import edu.bu.chess.game.move.MovementMove;
+import edu.bu.chess.game.move.PromotePawnMove;
+import edu.bu.chess.game.player.Player;
 
 import src.pas.chess.heuristics.CustomHeuristics;
 // JAVA PROJECT IMPORTS
@@ -37,7 +44,7 @@ public class CustomMoveOrderer
 					case CAPTUREMOVE:
 						captureNodes.add(node);
 						break;
-					case PROMOTEMOVE:
+					case PROMOTEPAWNMOVE:
 						promotionNodes.add(node);
 						break;
 					default:
@@ -65,7 +72,21 @@ public class CustomMoveOrderer
 	 * @return True if the move controls the center, otherwise false.
 	 */
 	private static boolean isCenterControlMove(DFSTreeNode node) {
-		Coordinate targetPosition = node.getMove().getTargetPosition();
+		MoveType moveType = node.getMove().getType();
+		Coordinate targetPosition = null;
+		if (moveType == MoveType.MOVEMENTMOVE) {
+			MovementMove movementMove = (MovementMove) node.getMove();
+			targetPosition = movementMove.getTargetPosition();
+		} else if (moveType == MoveType.CAPTUREMOVE) {
+			CaptureMove captureMove = (CaptureMove) node.getMove();
+			int targetPieceID = captureMove.getTargetPieceID();
+			Player targetPlayer = captureMove.getTargetPlayer();
+			targetPosition = node.getGame().getCurrentPosition(targetPlayer, targetPieceID);
+		} else if (moveType == MoveType.PROMOTEPAWNMOVE || moveType == MoveType.ENPASSANTMOVE
+				|| moveType == MoveType.CASTLEMOVE) {
+			return false;
+		}
+		
 		int x = targetPosition.getXPosition();
 		int y = targetPosition.getYPosition();
 		return (x >= 4 && x <= 5 && y >= 4 && y <= 5);
