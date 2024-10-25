@@ -83,6 +83,7 @@ public class AlphaBetaAgent
 			} else // we can get the children of this node and find its best value
 			{
 				List<DFSTreeNode> children = node.getChildren();
+				CustomMoveOrderer.order(children);
 
 				double bestUtilityValue;
 				if (node.getType() == DFSTreeNodeType.MAX) {
@@ -144,7 +145,7 @@ public class AlphaBetaAgent
 	 * You can also change this is the xml file, however if you don't provide one in
 	 * the xml file we use this default value
 	 */
-	private static final int DEFAULTMAXDEPTH = 3;
+	private static final int DEFAULTMAXDEPTH = 4;
 
 	private final int maxDepth;
 	private final long maxPlaytimeInMS;
