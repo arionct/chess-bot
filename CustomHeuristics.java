@@ -97,7 +97,7 @@ public class CustomHeuristics
 				if (piece.getType() == PieceType.PAWN) {
 					maxPlayerCenterPieces += 2;
 				} else {
-					minPlayerCenterPieces = 0.5;
+					minPlayerCenterPieces += 0.5;
 				}
 			} else if (isCenterSquare(position, "max")) {
 				minPlayerCenterPieces += 0.2;
@@ -177,7 +177,7 @@ public class CustomHeuristics
 		double centerHeuristicValue = CustomHeuristics.getCenterControlAdvantage(node);
 		double developmentHeuristicValue = CustomHeuristics.getDevelopmentAdvantage(node);
 
-		return (3.0 * materialHeuristicValue) + (0.5 * mobilityHeuristicValue) + (0.3 * centerHeuristicValue)
+		return (3.0 * materialHeuristicValue) + (0.05 * mobilityHeuristicValue) + (0.3 * centerHeuristicValue)
 				+ (0.8 * developmentHeuristicValue);
 	}
 
