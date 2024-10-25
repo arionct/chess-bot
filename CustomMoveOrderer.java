@@ -1,14 +1,13 @@
 package src.pas.chess.moveorder;
 
 
-// SYSTEM IMPORTS
 import edu.bu.chess.search.DFSTreeNode;
-
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import src.pas.chess.heuristics.CustomHeuristics;
 
-
-// JAVA PROJECT IMPORTS
-import src.pas.chess.moveorder.DefaultMoveOrderer;
+// SYSTEM IMPORTS
 
 public class CustomMoveOrderer
     extends Object
@@ -23,8 +22,8 @@ public class CustomMoveOrderer
 	 */
 	public static List<DFSTreeNode> order(List<DFSTreeNode> nodes)
 	{
-		// please replace this!
-		return DefaultMoveOrderer.order(nodes);
+		Collections.sort(nodes, Comparator.comparingDouble(CustomHeuristics::getMaxPlayerHeuristicValue).reversed());
+        return nodes;
 	}
 
 }
