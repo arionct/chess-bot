@@ -83,7 +83,7 @@ public class AlphaBetaAgent
 			} else // we can get the children of this node and find its best value
 			{
 				List<DFSTreeNode> children = node.getChildren();
-				CustomMoveOrderer.order(children);
+				children = CustomMoveOrderer.order(children);
 
 				double bestUtilityValue;
 				if (node.getType() == DFSTreeNodeType.MAX) {
