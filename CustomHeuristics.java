@@ -211,9 +211,10 @@ public class CustomHeuristics
 		double mobilityHeuristicValue = CustomHeuristics.getMobilityAdvantage(node);
 		double centerHeuristicValue = CustomHeuristics.getCenterControlAdvantage(node);
 		double developmentHeuristicValue = CustomHeuristics.getDevelopmentAdvantage(node);
+		double promotionHeuristicValue = CustomHeuristics.getPromotionAdvantage(node);
 
 		return (3.0 * materialHeuristicValue) + (0.05 * mobilityHeuristicValue) + (0.3 * centerHeuristicValue)
-				+ (0.8 * developmentHeuristicValue);
+				+ (0.8 * developmentHeuristicValue) + (3.0 * promotionHeuristicValue);
 	}
 
 }
